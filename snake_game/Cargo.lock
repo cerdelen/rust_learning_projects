@@ -598,14 +598,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "init"
-version = "0.1.0"
-dependencies = [
- "piston_window",
- "rand",
-]
-
-[[package]]
 name = "instant"
 version = "0.1.12"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1401,6 +1393,14 @@ dependencies = [
  "wayland-client",
  "wayland-cursor",
  "wayland-protocols",
+]
+
+[[package]]
+name = "sname_game"
+version = "0.1.0"
+dependencies = [
+ "piston_window",
+ "rand",
 ]
 
 [[package]]
