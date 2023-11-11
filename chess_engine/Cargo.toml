@@ -1,0 +1,19 @@
+[package]
+name = "chess_engine"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+piston_window = "0.128.0"
+image = "0.24.7"
+piston = "0.53.1"
+gfx = "0.18.2"
+# gfx_core = "0.9.2"
+# gfx_device_gl = "0.5.0"
+# opengl_graphics = "0.83.0"
+
+# piston = "*"
+# graphics = "*"
+# glutin_window = "*"
