@@ -6,6 +6,16 @@ use piston_window::*;
 use std::collections::HashMap;
 
 impl Board {
+    pub fn standard_board_draw(
+        &self,
+        c: &Context,
+        g: &mut G2d,
+        map: &HashMap<(PieceType, PieceColour), PieceTexture>,
+    ) {
+        self.draw_board_background(c, g);
+        // self.highligh_tiles(self.all_pieces(), c, g);
+        self.draw_pieces(c, g, map);
+    }
     fn draw_board_background(&self, c: &Context, g: &mut G2d) {
         clear([0.0, 0.0, 0.0, 1.0], g);
         for x in 0..8 {
@@ -73,7 +83,21 @@ impl Board {
         piston_window::image(&tex.tex, final_con.transform, g);
     }
 
-    fn get_full_piece_type(&self, bit_board: u64) -> Option<(PieceType, PieceColour)> {
+    fn draw_pieces(
+        &self,
+        c: &Context,
+        g: &mut G2d,
+        map: &HashMap<(PieceType, PieceColour), PieceTexture>,
+    ) {
+        for x in 0..8 {
+            for y in 0..8 {
+                if let Some(piece) = self.get_full_piece_type(1 << 63 - ((y * 8) + x)) {
+                    Self::draw_piece_type(c, g, map, [x as f64, y as f64], &piece);
+                }
+            }
+        }
+    }
+    pub fn get_full_piece_type(&self, bit_board: u64) -> Option<(PieceType, PieceColour)> {
         if bit_board & self.black.pawns != 0 {
             return Some((PieceType::Pawn, PieceColour::Black));
         }
@@ -112,29 +136,5 @@ impl Board {
         }
         None
     }
-    fn draw_pieces(
-        &self,
-        c: &Context,
-        g: &mut G2d,
-        map: &HashMap<(PieceType, PieceColour), PieceTexture>,
-    ) {
-        for x in 0..8 {
-            for y in 0..8 {
-                if let Some(piece) = self.get_full_piece_type(1 << 63 - ((y * 8) + x)) {
-                    Self::draw_piece_type(c, g, map, [x as f64, y as f64], &piece);
-                }
-            }
-        }
-    }
 
-    pub fn standard_board_draw(
-        &self,
-        c: &Context,
-        g: &mut G2d,
-        map: &HashMap<(PieceType, PieceColour), PieceTexture>,
-    ) {
-        self.draw_board_background(c, g);
-        // self.highligh_tiles(self.all_pieces(), c, g);
-        self.draw_pieces(c, g, map);
-    }
 }

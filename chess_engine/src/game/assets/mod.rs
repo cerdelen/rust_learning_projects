@@ -1,9 +1,14 @@
 use crate::utils::enums::*;
-use crate::utils::structs::PieceTexture;
 use piston_window::{Flip, PistonWindow, Texture, TextureSettings};
 use std::collections::HashMap;
 // use std::fmt::format;
 use std::path::Path;
+
+pub struct PieceTexture {
+    pub piece_type: PieceType,
+    pub col: PieceColour,
+    pub tex: <G2d<'static> as Graphics>::Texture,
+}
 
 fn load_asset(
     window: &mut PistonWindow,

@@ -1,24 +1,59 @@
-mod assets;
-mod board;
-mod game_logic;
-mod utils;
-use assets::load_assets;
-use board::Board;
-
-use std::collections::hash_map::HashMap;
-use utils::structs::Game;
+mod game;
+use game::Game;
 
 mod consts;
 use consts::*;
 
-use piston_window::{PistonWindow, WindowSettings};
+// use piston_window::{PistonWindow, WindowSettings};
+use piston_window::*;
 
-/// [x, y] in u32
+use crate::utils::enums::{PieceType, SelectionState};
+use crate::utils::structs::{Board, Game, MyMoverErr, Piece};
+
+pub fn check_move(&self, piece: &Piece, dest_tile: u64) -> Result<(), MyMoverErr> {
+    // match piece.piece_type {
+    //     PieceType::Rook => print!("Rook"),
+    //     PieceType::Bish => print!("Bish"),
+    //     PieceType::Knight => print!("Knight"),
+    //     PieceType::Queen => print!("Queen"),
+    //     PieceType::King => print!("King"),
+    //     PieceType::Pawn => print!("Pawn"),
+    // }
+    // println!(" move {:#066b} to {:#066b}", piece.tile, dest_tile);
+    Ok(())
+}
+
+pub fn select_piece(&mut self, selection: u64) {
+    if let Some(piece) = self.board.get_piece(selection) {
+        match piece.piece_type {
+            PieceType::Rook => print!("Rook"),
+            PieceType::Bish => print!("Bish"),
+            PieceType::Knight => print!("Knight"),
+            PieceType::Queen => print!("Queen"),
+            PieceType::King => print!("King"),
+            PieceType::Pawn => print!("Pawn"),
+        }
+        println!(" selected on tile {:#066b}", selection);
+        self.selection = SelectionState::ToMove(piece);
+    }
+}
+
+pub fn tile_pressed(&mut self, tile: u64) {
+    match &self.selection {
+        SelectionState::None => {
+            self.select_piece(tile);
+        }
+        SelectionState::ToMove(piece) => {
+            if let Ok(_) = self.check_move(piece, tile) {
+                self.selection = SelectionState::None;
+            }
+        }
+    }
+}
+
 fn coord_to_bitmap(coord: [u32; 2]) -> u64 {
     1 << 63 - ((coord[1] * 8) + coord[0])
 }
-
-use piston_window::*;
 
 // println!("highligh_tiles, bit_board: {:#066b}", bit_board);
 // idea: have an all peices bitboard in game struct (maybe also all black/ all white)
@@ -33,10 +68,7 @@ fn main() {
         .unwrap();
 
     // let board = Board::start_board();
-    let mut game = Game::new();
-
-    let piece_texture_map: HashMap<(PieceType, PieceColour), PieceTexture> =
-        load_assets(&mut window);
+    let mut game = Game::new(&window);
 
     while let Some(event) = window.next() {
         if let Some(Button::Keyboard(key)) = event.press_args() {
@@ -53,8 +85,6 @@ fn main() {
                 }
             }
         }
-        window.draw_2d(&event, |c, g, _| {
-            game.board.standard_board_draw(&c, g, &piece_texture_map)
-        });
+        window.draw_2d(&event, |c, g, _| game.standard_draw(&c, g));
     }
 }
