@@ -1,0 +1,3 @@
+# surreal env
+DB_USER=user
+DB_PASSWORD=password123
