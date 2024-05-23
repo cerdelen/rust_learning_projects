@@ -1,9 +1,11 @@
-use crate::board::Board;
-use crate::{consts::*, coord_to_bitmap, PieceColour};
-use crate::{PieceTexture, PieceType};
+use crate::consts::*;
+use crate::game::{Board, PieceColour, PieceTexture, PieceType};
+// use crate::{PieceTexture, PieceType};
 use piston_window::types::Vec2d;
 use piston_window::*;
 use std::collections::HashMap;
+
+use super::MoveSet;
 
 impl Board {
     pub fn standard_board_draw(
@@ -13,7 +15,7 @@ impl Board {
         map: &HashMap<(PieceType, PieceColour), PieceTexture>,
     ) {
         self.draw_board_background(c, g);
-        // self.highligh_tiles(self.all_pieces(), c, g);
+        self.highligh_tiles(&self.debugging_highlight, c, g);
         self.draw_pieces(c, g, map);
     }
     fn draw_board_background(&self, c: &Context, g: &mut G2d) {
@@ -41,11 +43,11 @@ impl Board {
         }
     }
 
-    pub fn highligh_tiles(&self, bit_board: u64, c: &Context, g: &mut G2d) {
+    pub fn highligh_tiles(&self, highligh_tiles: &MoveSet, c: &Context, g: &mut G2d) {
         for x in 0..8 {
             for y in 0..8 {
                 let shift = 63 - (x * 8 + y);
-                if ((bit_board >> shift) & 1) == 1 {
+                if ((highligh_tiles.moves >> shift) & 1) == 1 {
                     rectangle(
                         RED_HIGLITED_TILE,
                         [
@@ -136,5 +138,4 @@ impl Board {
         }
         None
     }
-
 }

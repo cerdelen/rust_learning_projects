@@ -1,35 +1,12 @@
-
 use crate::consts::*;
-use crate::utils::enums::*;
-use crate::utils::structs::*;
+use crate::game::{board::PlayerPosition, Board, Piece, PieceColour, PieceType};
 
 impl Board {
-    pub fn start_board() -> Self {
-        Self {
-            white: PlayerPosition {
-                pawns: A2 | B2 | C2 | D2 | E2 | F2 | G2 | H2,
-                rook: A1 | H1,
-                knight: B1 | G1,
-                bishop: C1 | F1,
-                queen: D1,
-                king: E1,
-            },
-            black: PlayerPosition {
-                pawns: A7 | B7 | C7 | D7 | E7 | F7 | G7 | H7,
-                rook: A8 | H8,
-                knight: B8 | G8,
-                bishop: C8 | F8,
-                queen: D8,
-                king: E8,
-            },
-        }
-    }
-
-    pub fn get_piece(&self, tile: u64) -> Option<Piece> {
-        if let Some(piece) = self.get_white_piece(tile) {
+    pub fn get_piece(&self, pos: u64) -> Option<Piece> {
+        if let Some(piece) = self.get_white_piece(pos) {
             return Some(piece);
         }
-        if let Some(piece) = self.get_black_piece(tile) {
+        if let Some(piece) = self.get_black_piece(pos) {
             return Some(piece);
         }
         None
@@ -57,80 +34,94 @@ impl Board {
         self.all_white_pieces() | self.all_black_pieces()
     }
 
-    pub fn get_black_piece(&self, tile: u64) -> Option<Piece> {
-        if self.black.rook & tile != 0 {
+    pub fn get_black_piece(&self, pos: u64) -> Option<Piece> {
+        let colour = PieceColour::Black;
+        if self.black.rook & pos != 0 {
             return Some(Piece {
-                piece_type: crate::PieceType::Rook,
-                tile,
+                piece_type: PieceType::Rook,
+                colour,
+                pos,
             });
         }
-        if self.black.bishop & tile != 0 {
+        if self.black.bishop & pos != 0 {
             return Some(Piece {
-                piece_type: crate::PieceType::Bish,
-                tile,
+                piece_type: PieceType::Bish,
+                colour,
+                pos,
             });
         }
-        if self.black.knight & tile != 0 {
+        if self.black.knight & pos != 0 {
             return Some(Piece {
-                piece_type: crate::PieceType::Knight,
-                tile,
+                piece_type: PieceType::Knight,
+                colour,
+                pos,
             });
         }
-        if self.black.queen & tile != 0 {
+        if self.black.queen & pos != 0 {
             return Some(Piece {
-                piece_type: crate::PieceType::Queen,
-                tile,
+                piece_type: PieceType::Queen,
+                colour,
+                pos,
             });
         }
-        if self.black.king & tile != 0 {
+        if self.black.king & pos != 0 {
             return Some(Piece {
-                piece_type: crate::PieceType::King,
-                tile,
+                piece_type: PieceType::King,
+                colour,
+                pos,
             });
         }
-        if self.black.pawns & tile != 0 {
+        if self.black.pawns & pos != 0 {
             return Some(Piece {
-                piece_type: crate::PieceType::Pawn,
-                tile,
+                piece_type: PieceType::Pawn,
+                colour,
+                pos,
             });
         }
         None
     }
-    pub fn get_white_piece(&self, tile: u64) -> Option<Piece> {
-        if self.white.rook & tile != 0 {
+    pub fn get_white_piece(&self, pos: u64) -> Option<Piece> {
+        let colour = PieceColour::White;
+        if self.white.rook & pos != 0 {
             return Some(Piece {
-                piece_type: crate::PieceType::Rook,
-                tile,
+                piece_type: PieceType::Rook,
+                colour,
+                pos,
             });
         }
-        if self.white.bishop & tile != 0 {
+        if self.white.bishop & pos != 0 {
             return Some(Piece {
-                piece_type: crate::PieceType::Bish,
-                tile,
+                piece_type: PieceType::Bish,
+                colour,
+                pos,
             });
         }
-        if self.white.knight & tile != 0 {
+        if self.white.knight & pos != 0 {
             return Some(Piece {
-                piece_type: crate::PieceType::Knight,
-                tile,
+                piece_type: PieceType::Knight,
+                colour,
+                pos,
             });
         }
-        if self.white.queen & tile != 0 {
+        if self.white.queen & pos != 0 {
             return Some(Piece {
-                piece_type: crate::PieceType::Queen,
-                tile,
+                piece_type: PieceType::Queen,
+                colour,
+                pos,
             });
         }
-        if self.white.king & tile != 0 {
+        if self.white.king & pos != 0 {
             return Some(Piece {
-                piece_type: crate::PieceType::King,
-                tile,
+                piece_type: PieceType::King,
+                colour,
+                pos,
             });
         }
-        if self.white.pawns & tile != 0 {
+        if self.white.pawns & pos != 0 {
             return Some(Piece {
-                piece_type: crate::PieceType::Pawn,
-                tile,
+                piece_type: PieceType::Pawn,
+                colour,
+                pos,
             });
         }
         None

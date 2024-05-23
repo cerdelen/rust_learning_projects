@@ -1,7 +1,7 @@
-use crate::utils::enums::*;
-use piston_window::{Flip, PistonWindow, Texture, TextureSettings};
+use piston_window::{Flip, G2d, Graphics, PistonWindow, Texture, TextureSettings};
 use std::collections::HashMap;
 // use std::fmt::format;
+use crate::game::{PieceColour, PieceType};
 use std::path::Path;
 
 pub struct PieceTexture {
@@ -24,7 +24,6 @@ fn load_asset(
             tex: Texture::from_path(
                 &mut window.create_texture_context(),
                 Path::new(&w),
-                // p_w,
                 Flip::None,
                 &TextureSettings::new(),
             )
