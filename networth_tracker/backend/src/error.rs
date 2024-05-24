@@ -5,12 +5,15 @@ use thiserror::Error;
 pub enum Error {
 	#[error("database error")]
 	Db,
+	#[error("wtfff")]
+	Other(String)
 }
 
 impl ResponseError for Error {
 	fn error_response(&self) -> HttpResponse {
 		match self {
 			Error::Db => HttpResponse::InternalServerError().body(self.to_string()),
+			Error::Other(message) => HttpResponse::InternalServerError().body(message.clone()),
 		}
 	}
 }

@@ -1,5 +1,9 @@
 mod error;
 mod person;
+mod schema;
+mod profile;
+mod models;
+
 
 use actix_web::{App, HttpServer};
 use once_cell::sync::Lazy;
@@ -22,17 +26,24 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 	DB.use_ns("namespace").use_db("database").await?;
 
+    schema::create_schema(&DB).await.expect("Failed to create schema");
+
 	HttpServer::new(|| {
 		App::new()
-			.service(person::create)
+			.service(profile::signup)
+			.service(profile::get_all_users)
+			.service(profile::getting_specific_user)
+			// .service(profile::signin)
 			.service(person::read)
 			.service(person::update)
 			.service(person::delete)
 			.service(person::list)
+			.service(person::index)
+			.service(person::get_price)
 	})
 	.bind(("0.0.0.0", 3000))?
 	.run()
 	.await?;
 
 	Ok(())
-}
+} 

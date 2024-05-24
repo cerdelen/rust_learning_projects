@@ -34,12 +34,26 @@ pub async fn update(id: Path<String>, person: Json<Person>) -> Result<Json<Optio
 
 #[delete("/person/{id}")]
 pub async fn delete(id: Path<String>) -> Result<Json<Option<Person>>, Error> {
-	let person = DB.delete((PERSON, &*id)).await?;
+let person = DB.delete((PERSON, &*id)).await?;
 	Ok(Json(person))
 }
 
 #[get("/people")]
 pub async fn list() -> Result<Json<Vec<Person>>, Error> {
+	println!("allo people get");
 	let people = DB.select(PERSON).await?;
 	Ok(Json(people))
+}
+
+#[get("/")]
+pub async fn index() -> Result<String, Error> {
+	println!("get index");
+	Ok("Hello World!\n".to_string())
+}
+
+#[get("/price/{coin}")]
+pub async fn get_price(coin: Path<String>) -> Result<String, Error> {
+	println!("got into get price");
+	let name = coin.into_inner();
+	Ok(format!("name {}", name))
 }
