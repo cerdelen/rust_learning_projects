@@ -3,6 +3,7 @@ mod person;
 mod schema;
 mod profile;
 mod models;
+mod coinmarket;
 
 
 use actix_web::{App, HttpServer};
@@ -33,6 +34,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 			.service(profile::signup)
 			.service(profile::get_all_users)
 			.service(profile::getting_specific_user)
+			.service(coinmarket::price_quote)
+			.service(coinmarket::coin_map)
 			// .service(profile::signin)
 			.service(person::read)
 			.service(person::update)
