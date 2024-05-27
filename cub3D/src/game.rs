@@ -79,7 +79,7 @@ impl Game {
 		// 		clear(BACKGROUND_COLOUR, g);
 		// 		game.draw(&c, g)
 		// 	});
-	
+
 		// 	event.update(|arg| {
 		// 		game.update(arg.dt);
 		// 	});
@@ -98,9 +98,7 @@ impl Game {
 			Key::W | Key::A | Key::S | Key::D => self.player.moves(key),
 			_ => println!("Other Key pressed"),
 		}
-
 		println!("{}", self.player);
-		// self.update_snake(dir);
 	}
 
 }
