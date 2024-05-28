@@ -10,6 +10,7 @@ use std::f64::consts::PI;
 
 use crate::consts::PLAYER_ROT_ANGLE;
 use crate::consts::PLAYER_MOV_SPEED;
+use crate::game::{Fields, Map};
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct Vector {
@@ -17,16 +18,21 @@ pub struct Vector {
 	pub y: f64,
 }
 
+impl fmt::Display for Vector {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "({}, {})", self.x, self.y)
+    }
+}
+
 impl Vector {
-	pub fn add(&mut self, other: &Vector) {
-        println!("Got into add");
-		self.x += other.x;
-		self.y += other.y;
+	pub fn add(&self, other: &Vector) -> Self {
+        Vector {
+            x: self.x + other.x,
+            y: self.y + other.y
+        }
 	}
 
 	pub fn mul(&self, multiplicator: f64) -> Self {
-        println!("Got into add");
-
         Vector {
             x: self.x * multiplicator,
             y: self.y * multiplicator
@@ -80,14 +86,31 @@ impl Player {
 		};
 	}
 
-	pub fn moves(&mut self, key: Key) {
-		match key {
-			Key::W => self.position.add(&self.direction.mul(PLAYER_MOV_SPEED)),
-			Key::S => self.position.add(&self.direction.get_reverse().mul(PLAYER_MOV_SPEED)),
-			Key::A => self.position.add(&self.direction.rotate_by_angle(90.0).mul(PLAYER_MOV_SPEED)),
-			Key::D => self.position.add(&self.direction.rotate_by_angle(-90.0).mul(PLAYER_MOV_SPEED)),
-			_ => panic!("Got into Move with a Key that isn't a Move Key!\nKey code: {}", key.code()),
-		}
+	pub fn moves(&mut self, key: Key, map: &Map) {
+		if let Some(dest) =  match key {
+			Key::W => {
+                Some(self.position.add(&self.direction.mul(PLAYER_MOV_SPEED)))
+            },
+			Key::S => {
+                Some(self.position.add(&self.direction.get_reverse().mul(PLAYER_MOV_SPEED)))
+            },
+			Key::A => {
+             Some(self.position.add(&self.direction.rotate_by_angle(90.0).mul(PLAYER_MOV_SPEED)))
+            },
+			Key::D => {
+             Some(self.position.add(&self.direction.rotate_by_angle(-90.0).mul(PLAYER_MOV_SPEED)))
+            },
+			_ => {
+                panic!("Got into Move with a Key that isn't a Move Key!\nKey code: {}", key.code());
+            },
+		} // get dest in Some
+        {
+            println!("Dest = {}", dest);
+            match map.get_field(&dest) {
+                Fields::EMPTY => self.position = dest,
+                _ => return ,
+            }
+        } // check if returned dest is viable to walk towards
 
 	}
 }

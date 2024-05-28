@@ -4,7 +4,7 @@ use piston_window::types::Color;
 use rand::{thread_rng, Rng};
 use crate::config::Config;
 
-use crate::player::{Player, Position};
+use crate::player::{Player, Position, Vector};
 // use crate::draw::{draw_block, draw_rec};
 
 const MOVING_PERIOD: f64 = 0.1;
@@ -48,12 +48,12 @@ impl Map {
 		}
 	}
 
-	pub fn get_field(&self, x: i64, y: i64) -> Fields {
-		if x < 0 || y < 0 {
+	pub fn get_field(&self, field: &Vector) -> Fields {
+		if field.x < 0.0 || field.y < 0.0 {
 			return Fields::OUT_OF_BOUNDS;
 		}
-		let x = x as usize;
-		let y = y as usize;
+		let x = field.x as usize;
+		let y = field.y as usize;
 		if x > self.map_w || y > self.map_h {
 			return Fields::OUT_OF_BOUNDS;
 		}
@@ -90,14 +90,10 @@ impl Game {
 	pub fn key_press(&mut self, key: Key) {
 		// if self.game_over {return ;}
 		match key {
-			// Key::Up => println!("Up Key pressed"),
-			// Key::Down => println!("Down Key pressed"),
-			// Key::Left => println!("Left Key pressed"),
-			// Key::Right => println!("Rgiht Key pressed"),
 			Key::Left | Key::Right => self.player.rotate(key),
-			Key::W | Key::A | Key::S | Key::D => self.player.moves(key),
+			Key::W | Key::A | Key::S | Key::D => self.player.moves(key, &self.map),
 			_ => println!("Other Key pressed"),
-		}
+		};
 		println!("{}", self.player);
 	}
 
