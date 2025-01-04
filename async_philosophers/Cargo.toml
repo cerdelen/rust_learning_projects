@@ -1,0 +1,9 @@
+[package]
+name = "async_philosophers"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+tokio = { version = "1", features = ["full"] }
+chrono = "0.4"
+clap = { version = "4.3", features = ["derive"] }
